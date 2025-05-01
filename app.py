@@ -1,4 +1,3 @@
-
 import streamlit as st
 from transformers import pipeline
 
@@ -10,7 +9,8 @@ class ConversationAgent:
 
 class EmotionDetectionAgent:
     def __init__(self):
-        self.classifier = pipeline("text-classification", model="Panda0116/emotion-classification-model")
+        # Load from trained model directory
+        self.classifier = pipeline("text-classification", model="trained_emotion_model", tokenizer="trained_emotion_model")
 
     def detect_emotion(self, text):
         result = self.classifier(text)[0]
@@ -18,7 +18,7 @@ class EmotionDetectionAgent:
 
 class AlertAgent:
     def send_alert(self, emotion):
-        if emotion in ["sadness", "anger", "fear"]:
+        if emotion.lower() in ["sadness", "anger", "fear"]:
             return True
         return False
 
@@ -32,13 +32,12 @@ class RecommendationAgent:
             "love": "Share kind words with someone today.",
             "surprise": "Reflect and write about it.",
             "neutral": "Practice mindfulness or journaling."
-        }.get(emotion, "Take care of yourself and stay present.")
-
+        }.get(emotion.lower(), "Take care of yourself and stay present.")
 
 # --- Streamlit UI ---
 
-st.set_page_config(page_title="Mental Health AI Assistant", layout="centered")
-st.title("🧠 Mental Health Support Assistant")
+st.set_page_config(page_title="Mental Health AI (Custom Model)", layout="centered")
+st.title("🧠 Mental Health Support Assistant (Trained Model)")
 
 st.markdown("Enter how you're feeling and let our AI assistant respond with support, emotion insight, and helpful suggestions.")
 
